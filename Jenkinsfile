@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -20,12 +21,20 @@ pipeline {
             }
         }
 
-	stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                            mvn sonar:sonar \
+                              -Dsonar.projectKey=devops-project \
+                              -Dsonar.projectName=devops-project \
+                              -Dsonar.host.url=http://localhost:9000 \
+                              -Dsonar.token=$SONAR_TOKEN
+                        '''
+                    }
                 }
             }
-	}
+        }
     }
 }
