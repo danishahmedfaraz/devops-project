@@ -43,5 +43,20 @@ pipeline {
 		}
 	    }
         }
+    stage('Publish to Nexus') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'nexus-credentials',
+            usernameVariable: 'NEXUS_USERNAME',
+            passwordVariable: 'NEXUS_PASSWORD'
+        )]) {
+            sh '''
+                mvn deploy \
+                  -DskipTests \
+                  -s /var/lib/jenkins/.m2/settings.xml
+            '''
+        }
+    }
+}     
     }
 }
