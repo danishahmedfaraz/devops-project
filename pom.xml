@@ -49,5 +49,11 @@
 
         </plugins>
     </build>
+    <distributionManagement>
+    <repository>
+        <id>nexus-releases</id>
+        <url>http://localhost:8081/repository/devops-releases/</url>
+    </repository>
+    </distributionManagement>
 
 </project>
