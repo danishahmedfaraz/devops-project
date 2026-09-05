@@ -13,16 +13,12 @@ public class App extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request,
                           HttpServletResponse response)
-            throws ServletException {
+            throws ServletException, IOException {
 
         response.setContentType("text/html");
 
-        try {
-            PrintWriter writer = response.getWriter();
-            writer.println("<h1>DevOps Project is running!</h1>");
-            writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
-        } catch (IOException e) {
-            throw new ServletException("Unable to write response", e);
-        }
+        PrintWriter writer = response.getWriter();
+        writer.println("<h1>DevOps Project is running!</h1>");
+        writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
     }
 }
