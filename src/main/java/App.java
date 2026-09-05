@@ -1,3 +1,5 @@
+package com.devops;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,12 +15,17 @@ public class App extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request,
                           HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException {
 
-        response.setContentType("text/html");
+        try {
+            response.setContentType("text/html");
 
-        PrintWriter writer = response.getWriter();
-        writer.println("<h1>DevOps Project is running!</h1>");
-        writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
+            PrintWriter writer = response.getWriter();
+            writer.println("<h1>DevOps Project is running!</h1>");
+            writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
+
+        } catch (IOException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
