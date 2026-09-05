@@ -57,6 +57,19 @@ pipeline {
             '''
         }
     }
+}
+	stage('Deploy to Tomcat') {
+    	steps {
+        deploy adapters: [
+            tomcat9(
+                credentialsId: 'tomcat-credentials',
+                path: '',
+                url: 'http://localhost:8082'
+            )
+        ],
+        contextPath: 'devops-project',
+        war: 'target/devops-project.war'
+    }
 }     
     }
 }
