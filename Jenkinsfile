@@ -24,7 +24,10 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(
+                        credentialsId: 'sonarqube-token',
+                        variable: 'SONAR_TOKEN'
+                    )]) {
                         sh '''
                             mvn sonar:sonar \
                               -Dsonar.projectKey=devops-project \
@@ -36,40 +39,60 @@ pipeline {
                 }
             }
         }
-	stage('Quality Gate') {
-    	    steps {
-               timeout(time: 5, unit: 'MINUTES') {
-                   waitForQualityGate abortPipeline: true
-		}
-	    }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
-    stage('Publish to Nexus') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'nexus-credentials',
-            usernameVariable: 'NEXUS_USERNAME',
-            passwordVariable: 'NEXUS_PASSWORD'
-        )]) {
-            sh '''
-                mvn deploy \
-                  -DskipTests \
-                  -s /var/lib/jenkins/.m2/settings.xml
-            '''
+
+        stage('Publish to Nexus') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-credentials',
+                    usernameVariable: 'NEXUS_USERNAME',
+                    passwordVariable: 'NEXUS_PASSWORD'
+                )]) {
+                    sh '''
+                        mvn deploy \
+                          -DskipTests \
+                          -s /var/lib/jenkins/.m2/settings.xml
+                    '''
+                }
+            }
         }
-    }
-}
-	stage('Deploy to Tomcat') {
-    	steps {
-        deploy adapters: [
-            tomcat9(
-                credentialsId: 'tomcat-credentials',
-                path: '',
-                url: 'http://localhost:8082'
-            )
-        ],
-        contextPath: 'devops-project',
-        war: 'target/devops-project.war'
-    }
-}     
+
+        stage('Deploy to Tomcat') {
+            steps {
+                deploy adapters: [
+                    tomcat9(
+                        credentialsId: 'tomcat-credentials',
+                        path: '',
+                        url: 'http://localhost:8082'
+                    )
+                ],
+                contextPath: 'devops-project',
+                war: 'target/devops-project.war'
+            }
+        }
+
+        stage('Docker Deploy') {
+            steps {
+                sh '''
+                    docker stop devops-project-container || true
+                    docker rm devops-project-container || true
+
+                    docker build -t devops-project:1.0.0 .
+
+                    docker run -d \
+                        --name devops-project-container \
+                        --restart unless-stopped \
+                        -p 8083:8080 \
+                        devops-project:1.0.0
+                '''
+            }
+        }
     }
 }
