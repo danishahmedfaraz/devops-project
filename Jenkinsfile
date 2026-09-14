@@ -94,5 +94,20 @@ pipeline {
                 '''
             }
         }
+
+        stage('Kubernetes Deploy') {
+            steps {
+                sh '''
+                    minikube image load devops-project:1.0.0
+
+                    kubectl apply -f k8s-deployment.yaml
+                    kubectl apply -f k8s-service.yaml
+                    kubectl apply -f k8s-ingress.yaml
+
+                    kubectl rollout restart deployment/devops-project -n dev
+                    kubectl rollout status deployment/devops-project -n dev
+                '''
+            }
+        }
     }
 }
