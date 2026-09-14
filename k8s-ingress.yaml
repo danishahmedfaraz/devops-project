@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-project-ingress
+  namespace: dev
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /devops-project
+            pathType: Prefix
+            backend:
+              service:
+                name: devops-project-service
+                port:
+                  number: 80
