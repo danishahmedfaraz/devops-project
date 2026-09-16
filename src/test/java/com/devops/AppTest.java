@@ -33,6 +33,6 @@ public class AppTest {
         String output = stringWriter.toString();
 
         assertTrue(output.contains("Environment:"));
-        assertTrue(output.contains("Deployed successfully through Jenkins CI/CD."));
+        assertTrue(output.contains("Version 2.0 - Rolling update deployment."));
     }
 }

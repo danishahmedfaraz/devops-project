@@ -27,7 +27,7 @@ public class App extends HttpServlet {
 
         	writer.println("<h1>" + appName + "</h1>");
         	writer.println("<p>Environment: " + appEnv + "</p>");
-        	writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
+        	writer.println("<p>Version 2.0 - Rolling update deployment.</p>");
 
    	 } catch (IOException e) {
         	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
