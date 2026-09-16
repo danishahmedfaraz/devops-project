@@ -17,5 +17,10 @@ spec:
         - name: devops-project
           image: devops-project:1.0.0
           imagePullPolicy: Never
+          envFrom:
+            - configMapRef:
+                name: devops-project-config
+            - secretRef:
+                name: devops-project-secret
           ports:
             - containerPort: 8080
