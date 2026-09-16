@@ -112,5 +112,30 @@ pipeline {
                 '''
             }
         }
+        stage('Post-Deployment Verification') {
+            steps {
+                sh '''
+                    echo "Verifying Kubernetes deployment..."
+
+                    kubectl get deployment devops-project -n dev
+                    kubectl get pods -n dev
+
+                    kubectl rollout status deployment/devops-project -n dev
+
+                    echo "Testing application..."
+
+                    kubectl run deployment-test \
+                        -n dev \
+                        --image=curlimages/curl:8.10.1 \
+                        --restart=Never \
+                        --rm \
+                        -i \
+                        --command -- \
+                        curl -f http://devops-project-service/devops-project/
+
+                    echo "Application verification successful."
+                '''
+            }
+        }
     }
 }
