@@ -17,16 +17,37 @@ spec:
         - name: devops-project
           image: devops-project:1.0.0
           imagePullPolicy: Never
+
           envFrom:
             - configMapRef:
                 name: devops-project-config
             - secretRef:
                 name: devops-project-secret
+
           ports:
             - containerPort: 8080
+
           volumeMounts:
             - name: app-storage
               mountPath: /data
+
+          livenessProbe:
+            httpGet:
+              path: /devops-project/
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /devops-project/
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
 
       volumes:
         - name: app-storage
