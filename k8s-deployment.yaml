@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: devops-project
-          image: devops-project:2.0.0
+          image: devops-project:latest
           imagePullPolicy: Never
 
           envFrom:

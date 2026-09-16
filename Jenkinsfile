@@ -84,13 +84,13 @@ pipeline {
                     docker stop devops-project-container || true
                     docker rm devops-project-container || true
 
-                    docker build -t devops-project:1.0.0 .
+                    docker build -t devops-project:${BUILD_NUMBER} .
 
                     docker run -d \
                         --name devops-project-container \
                         --restart unless-stopped \
                         -p 8083:8080 \
-                        devops-project:1.0.0
+                        devops-project:${BUILD_NUMBER}
                 '''
             }
         }
@@ -98,13 +98,16 @@ pipeline {
         stage('Kubernetes Deploy') {
             steps {
                 sh '''
-                    minikube image load devops-project:1.0.0
+                    minikube image load devops-project:${BUILD_NUMBER}
 
                     kubectl apply -f k8s-deployment.yaml
                     kubectl apply -f k8s-service.yaml
                     kubectl apply -f k8s-ingress.yaml
 
-                    kubectl rollout restart deployment/devops-project -n dev
+                    kubectl set image deployment/devops-project \
+                        devops-project=devops-project:${BUILD_NUMBER} \
+                        -n dev
+
                     kubectl rollout status deployment/devops-project -n dev
                 '''
             }
