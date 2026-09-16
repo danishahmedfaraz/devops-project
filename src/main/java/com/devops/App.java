@@ -12,20 +12,25 @@ import java.io.PrintWriter;
 @WebServlet("/")
 public class App extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request,
-                          HttpServletResponse response)
-            throws ServletException {
+	@Override
+	protected void doGet(HttpServletRequest request,
+        	             HttpServletResponse response)
+        	throws ServletException {
 
-        try {
-            response.setContentType("text/html");
+    	try {
+        	response.setContentType("text/html");
 
-            PrintWriter writer = response.getWriter();
-            writer.println("<h1>DevOps Project is running!</h1>");
-            writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
+        	String appName = System.getenv("APP_NAME");
+        	String appEnv = System.getenv("APP_ENV");
 
-        } catch (IOException e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-    }
+        	PrintWriter writer = response.getWriter();
+
+        	writer.println("<h1>" + appName + "</h1>");
+        	writer.println("<p>Environment: " + appEnv + "</p>");
+        	writer.println("<p>Deployed successfully through Jenkins CI/CD.</p>");
+
+   	 } catch (IOException e) {
+        	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+   	 }
+     }
 }

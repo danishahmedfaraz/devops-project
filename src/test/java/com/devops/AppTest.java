@@ -32,7 +32,7 @@ public class AppTest {
 
         String output = stringWriter.toString();
 
-        assertTrue(output.contains("DevOps Project is running!"));
+        assertTrue(output.contains("Environment:"));
         assertTrue(output.contains("Deployed successfully through Jenkins CI/CD."));
     }
 }
