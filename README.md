@@ -80,7 +80,9 @@ The pipeline performs:
               |
               v
          Application
-🛠️ Technology Stack
+
+ 🛠️ Technology Stack
+
 Technology	Purpose
 AWS EC2	Cloud infrastructure
 Amazon Linux	Server operating system
@@ -99,7 +101,8 @@ NGINX Ingress	Application routing
 HPA	Automatic pod scaling
 PersistentVolumeClaim	Persistent application storage
 Tomcat	Java application server
-🔄 CI/CD Pipeline
+
+ 🔄 CI/CD Pipeline
 
 The Jenkins pipeline consists of the following stages.
 
@@ -112,6 +115,7 @@ Jenkins checks out the latest application source code from GitHub.
 Maven compiles the application and packages it as a WAR file.
 
 mvn clean package
+
 3. Test
 
 Automated JUnit tests are executed.
@@ -171,6 +175,7 @@ curl -f http://devops-project-service/devops-project/
 
 If the application verification fails, the Jenkins pipeline fails.
 
+
 ☸️ Kubernetes Configuration
 
 The application uses the following Kubernetes resources:
@@ -192,7 +197,8 @@ Namespace
    +-- PersistentVolumeClaim
    |
    +-- HorizontalPodAutoscaler
-Deployment
+
+ Deployment
 
 The application runs with two replicas by default.
 
@@ -325,7 +331,9 @@ kubectl rollout status deployment/devops-project -n dev
 Rollout history:
 
 kubectl rollout history deployment/devops-project -n dev
+
 📂 Repository Structure
+
 devops-project/
 │
 ├── src/
@@ -352,6 +360,7 @@ devops-project/
 ├── Jenkinsfile
 ├── pom.xml
 └── README.md
+
 🎯 Key DevOps Concepts Demonstrated
 
 This project demonstrates practical experience with:
@@ -377,6 +386,7 @@ Ingress
 Deployment verification
 Rollback strategies
 Release traceability
+
 📊 Deployment Flow
 
 The complete deployment workflow is:
@@ -404,6 +414,7 @@ Kubernetes
 Rolling Deployment
     ↓
 Post-Deployment Verification
+
 ✅ Project Outcome
 
 The project provides an automated path from source-code commit to a running Kubernetes application.
