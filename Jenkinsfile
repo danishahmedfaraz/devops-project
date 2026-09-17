@@ -108,10 +108,16 @@ pipeline {
                         devops-project=devops-project:${BUILD_NUMBER} \
                         -n dev
 
+                    kubectl annotate deployment/devops-project \
+                        kubernetes.io/change-cause="Jenkins Build ${BUILD_NUMBER}" \
+                        -n dev \
+                        --overwrite
+
                     kubectl rollout status deployment/devops-project -n dev
                 '''
             }
         }
+
         stage('Post-Deployment Verification') {
             steps {
                 sh '''
