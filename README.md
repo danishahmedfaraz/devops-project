@@ -30,6 +30,8 @@ The pipeline performs:
 
 ## 🏗️ Architecture
 
+![DevOps CI/CD Architecture](architecture.png)
+
 ```text
                          Developer
                              |
